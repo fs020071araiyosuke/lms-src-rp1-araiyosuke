@@ -65,4 +65,13 @@ public interface TStudentAttendanceMapper {
 	 */
 	Boolean update(TStudentAttendance tStudentAttendance);
 
+//	int countPastUnentered(Integer lmsUserId, String todayStr, short dbFlgFalse);
+
+    /**
+     * task25:過去日の未入力件数取得
+     */
+    int countPastUnentered(
+            @Param("lmsUserId") Integer lmsUserId,
+            @Param("today") String today,
+            @Param("deleteFlg") Short deleteFlg);
 }

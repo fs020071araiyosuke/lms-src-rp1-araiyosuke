@@ -1,6 +1,7 @@
 package jp.co.sss.lms.service;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +45,35 @@ public class StudentAttendanceService {
 	@Autowired
 	private TStudentAttendanceMapper tStudentAttendanceMapper;
 
+    /**
+     * Task25：過去日未入力チェック
+     */
+	public boolean hasPastUnenteredAttendance(Integer lmsUserId) {
+	    String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+	    int count = tStudentAttendanceMapper.countPastUnentered(lmsUserId, today, (short)0);
+	    return count > 0;
+	}
+
+//    public boolean hasPastUnenteredAttendance() {
+//
+//        //現在日付を取得
+//        Date now = new Date();
+//
+//        //SimpleDateFormatでフォーマット
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        String todayStr = sdf.format(now);
+//
+//        // Mapperで未入力件数を取得
+//        int count = tStudentAttendanceMapper.countPastUnentered(
+//                loginUserDto.getLmsUserId(),
+//                todayStr,
+//                Constants.DB_FLG_FALSE
+//        );
+//
+//        //未入力件数が0より大きい場合true
+//        return count > 0;
+//    }
+	
 	/**
 	 * 勤怠一覧情報取得
 	 * 
