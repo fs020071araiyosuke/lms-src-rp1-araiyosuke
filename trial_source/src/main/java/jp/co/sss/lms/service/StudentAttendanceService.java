@@ -44,35 +44,56 @@ public class StudentAttendanceService {
 	private LoginUserDto loginUserDto;
 	@Autowired
 	private TStudentAttendanceMapper tStudentAttendanceMapper;
+	
 
-    /**
-     * Task25：過去日未入力チェック
-     */
-	public boolean hasPastUnenteredAttendance(Integer lmsUserId) {
-	    String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-	    int count = tStudentAttendanceMapper.countPastUnentered(lmsUserId, today, (short)0);
-	    return count > 0;
+	//Task25：過去日未入力チェック
+//	public boolean hasPastUnenteredAttendance() {
+//
+//		//現在日付を取得
+//		LocalDate today = LocalDate.now();
+//
+//		//Mapperで未入力件数を取得
+//		Integer count = tStudentAttendanceMapper.countPastUnentered(
+//				loginUserDto.getLmsUserId(),
+//				today,
+//				Constants.DB_FLG_FALSE);
+//
+//		//nullでないかつ未入力件数が0より大きい場合
+//		return count != null && count > 0;
+//	}
+
+	// Task25：過去日未入力チェック
+	public boolean hasPastUnenteredAttendance() {
+
+	    // SimpleDateFormatクラスでフォーマットパターンを設定する
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+	    // 現在日付を Date で取得（時刻付き）
+	    Date now = new Date();
+
+	    // SimpleDateFormat で "yyyy-MM-dd" にフォーマット（時刻をとる）
+	    String formattedToday = sdf.format(now);
+	
+	    // フォーマット済み文字列を再度 Date に変換（0:00:00 固定）
+	    Date todayZeroTime;
+	    try {
+	        todayZeroTime = sdf.parse(formattedToday);
+	    } catch (ParseException e) {
+	        throw new RuntimeException("日付フォーマット変換に失敗しました", e);
+	    }
+
+	    // Mapperで未入力件数を取得
+	    Integer count = tStudentAttendanceMapper.countPastUnentered(
+	            loginUserDto.getLmsUserId(),
+	            todayZeroTime,              //「日付（0:00:00）」を渡す
+	            Constants.DB_FLG_FALSE);
+
+	    // nullでないかつ未入力件数が0より大きい場合
+	    return count != null && count > 0;
 	}
 
-//    public boolean hasPastUnenteredAttendance() {
-//
-//        //現在日付を取得
-//        Date now = new Date();
-//
-//        //SimpleDateFormatでフォーマット
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        String todayStr = sdf.format(now);
-//
-//        // Mapperで未入力件数を取得
-//        int count = tStudentAttendanceMapper.countPastUnentered(
-//                loginUserDto.getLmsUserId(),
-//                todayStr,
-//                Constants.DB_FLG_FALSE
-//        );
-//
-//        //未入力件数が0より大きい場合true
-//        return count > 0;
-//    }
+
+
 	
 	/**
 	 * 勤怠一覧情報取得

@@ -40,17 +40,17 @@ public class AttendanceController {
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
-	public String index(Model model) throws ParseException{
+	public String index(Model model) throws ParseException {
 
 		// 勤怠一覧の取得
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-        //task25：過去日未入力チェック
-        boolean hasPastUnentered = studentAttendanceService.hasPastUnenteredAttendance(loginUserDto.getLmsUserId());
-        model.addAttribute("hasPastUnentered", hasPastUnentered);
-		
+		//task25：過去日未入力チェック//サービスクラスのメソッドを呼び登録
+		boolean hasPastUnentered = studentAttendanceService.hasPastUnenteredAttendance();
+		model.addAttribute("hasPastUnentered", hasPastUnentered);
+
 		return "attendance/detail";
 	}
 

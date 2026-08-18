@@ -7,7 +7,7 @@
 </head>
 <body>
 	
-	<!--task25-->
+	<!--task25:勤怠に未入力があればダイアログ表示する-->
 	<th:block th:if="${hasPastUnentered}">
         <script>
             alert("過去日の勤怠に未入力があります。");
@@ -32,7 +32,7 @@
 			<li><span th:text="'*' + '&nbsp' + ${error}" class="help-inline error"></span></li>
 		</ul>
 	</th:block>
-
+	
 	<th:block th:if="${session.loginUserDto.role == '0001'}">
 		<div class="well well-lg p10 mb10">
 			<div class="form-group">
