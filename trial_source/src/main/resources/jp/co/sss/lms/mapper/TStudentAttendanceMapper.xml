@@ -84,8 +84,8 @@
 		WHERE student_attendance_id = #{studentAttendanceId}
 	</update>
 	
-	<!--今日より前の勤怠で、出勤または退勤が未入力の件数を数える-->
-	<select id="countPastUnentered" resultType="int">
+	<!--新井陽介Task.25 今日より前の勤怠で、出勤または退勤が未入力の件数を数える-->
+	<select id="notEnterCount" resultType="int">
 	    SELECT COUNT(*)
 	    FROM t_student_attendance
 	    WHERE lms_user_id = #{lmsUserId}

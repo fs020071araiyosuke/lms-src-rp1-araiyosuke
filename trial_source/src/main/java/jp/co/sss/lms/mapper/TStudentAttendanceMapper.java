@@ -65,11 +65,17 @@ public interface TStudentAttendanceMapper {
 	 */
 	Boolean update(TStudentAttendance tStudentAttendance);
 
-	//task25:過去日の未入力件数取得
-	int countPastUnentered(
+	/**
+	 * 過去日の未入力件数取得
+	 * 
+	 * @param lmsUserId
+	 * @param todayZeroTime
+	 * @param deleteFlg
+	 * @return 取得結果
+	 * @author 新井陽介Task.25
+	 */
+	int notEnterCount(
 			@Param("lmsUserId") Integer lmsUserId,
 			@Param("today") Date todayZeroTime,
-			@Param("deleteFlg") Short deleteFlg
-			);
+			@Param("deleteFlg") Short deleteFlg);
 }
-		//@Param("today") LocalDate today,

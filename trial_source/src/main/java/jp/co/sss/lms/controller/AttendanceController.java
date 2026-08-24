@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.form.AttendanceForm;
-import jp.co.sss.lms.service.StudentAttendanceService;
+import jp.co.sss.lms.service.StudentAttendanceService2;
 import jp.co.sss.lms.util.Constants;
 
 /**
@@ -26,18 +26,19 @@ import jp.co.sss.lms.util.Constants;
 public class AttendanceController {
 
 	@Autowired
-	private StudentAttendanceService studentAttendanceService;
+	private StudentAttendanceService2 studentAttendanceService;
 	@Autowired
 	private LoginUserDto loginUserDto;
 
 	/**
-	 * 勤怠管理画面 初期表示(task25追記)
+	 * 勤怠管理画面 初期表示
 	 * 
 	 * @param lmsUserId
 	 * @param courseId
 	 * @param model
 	 * @return 勤怠管理画面
 	 * @throws ParseException
+	 * @author 新井陽介Task.25(追加)
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
 	public String index(Model model) throws ParseException {
@@ -47,8 +48,8 @@ public class AttendanceController {
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-		//task25：過去日未入力チェック//サービスクラスのメソッドを呼び登録
-		boolean hasPastUnentered = studentAttendanceService.hasPastUnenteredAttendance();
+		//新井陽介Task.25：過去日未入力チェック//サービスクラスのメソッドを呼び登録
+		boolean hasPastUnentered = studentAttendanceService.notEnterCheck();
 		model.addAttribute("hasPastUnentered", hasPastUnentered);
 
 		return "attendance/detail";
