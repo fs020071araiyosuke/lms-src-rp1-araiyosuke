@@ -15,6 +15,7 @@ import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.service.StudentAttendanceService2;
 import jp.co.sss.lms.util.Constants;
+import jp.co.sss.lms.util.LoginUserUtil;
 
 /**
  * 勤怠管理コントローラ
@@ -29,6 +30,9 @@ public class AttendanceController {
 	private StudentAttendanceService2 studentAttendanceService;
 	@Autowired
 	private LoginUserDto loginUserDto;
+	@Autowired
+	private LoginUserUtil loginUserUtil;
+
 
 	/**
 	 * 勤怠管理画面 初期表示
@@ -48,10 +52,14 @@ public class AttendanceController {
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-		//新井陽介Task.25：過去日未入力チェック//サービスクラスのメソッドを呼び登録
-		boolean hasPastUnentered = studentAttendanceService.notEnterCheck();
-		model.addAttribute("hasPastUnentered", hasPastUnentered);
-
+		//新井陽介Task.25：過去日未入力チェック
+	    //権限が受講生の場合のみ(utilの判定を利用)、過去日未入力チェックを実行する
+	    if (loginUserUtil.isStudent()) {
+	        boolean hasPastUnentered = studentAttendanceService.notEnterCheck();
+	        model.addAttribute("hasPastUnentered", hasPastUnentered);
+	    } else {
+	        model.addAttribute("hasPastUnentered", false);
+	    }
 		return "attendance/detail";
 	}
 
