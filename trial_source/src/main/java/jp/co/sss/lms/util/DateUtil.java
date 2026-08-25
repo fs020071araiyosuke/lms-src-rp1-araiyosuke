@@ -35,16 +35,15 @@ public class DateUtil {
 		return sdf.format(date);
 	}
 
-	/**
-	 * String型日付を"yyyy/M/d"形式にフォーマット
-	 * 
-	 * @param date
-	 * @return "yyyy/M/d"形式の日付
-	 */
-	public Date parse(String date) throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
-		return sdf.parse(date);
-	}
+    /**
+     * Task26修正
+     * String型日付を "yyyy-MM-dd" 形式でパースできるように変更
+     */
+    public Date parse(String date) throws ParseException {
+        // yyyy-MM-dd を読み取れるように修正
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.parse(date);
+    }
 
 	/**
 	 * String型日付を任意の日付形式にフォーマット

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.form.AttendanceForm;
-import jp.co.sss.lms.service.StudentAttendanceService2;
+import jp.co.sss.lms.service.StudentAttendanceService0825;
 import jp.co.sss.lms.util.Constants;
 import jp.co.sss.lms.util.LoginUserUtil;
 
@@ -27,7 +27,7 @@ import jp.co.sss.lms.util.LoginUserUtil;
 public class AttendanceController {
 
 	@Autowired
-	private StudentAttendanceService2 studentAttendanceService;
+	private StudentAttendanceService0825 studentAttendanceService;
 	@Autowired
 	private LoginUserDto loginUserDto;
 	@Autowired
@@ -142,19 +142,30 @@ public class AttendanceController {
 	 * @return 勤怠管理画面
 	 * @throws ParseException
 	 */
-	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
-	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
-			throws ParseException {
+	  @RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
+	    public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
+	            throws ParseException {
 
-		// 更新
-		String message = studentAttendanceService.update(attendanceForm);
-		model.addAttribute("message", message);
-		// 一覧の再取得
-		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
-				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
-		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
+	        // ★ Task27 入力チェック
+	        studentAttendanceService.updateInputCheck(attendanceForm, result);
 
-		return "attendance/detail";
-	}
+	        if (result.hasErrors()) {
+	            // エラー時は再度フォームを表示
+	            model.addAttribute("attendanceForm", attendanceForm);
+	            return "attendance/update";
+	        }
+
+	        // 更新処理
+	        String message = studentAttendanceService.update(attendanceForm);
+	        model.addAttribute("message", message);
+
+	        List<AttendanceManagementDto> attendanceManagementDtoList =
+	                studentAttendanceService.getAttendanceManagement(
+	                        loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
+
+	        model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
+
+	        return "attendance/detail";
+	    }
 
 }

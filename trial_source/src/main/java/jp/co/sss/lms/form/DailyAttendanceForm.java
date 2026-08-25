@@ -17,16 +17,12 @@ public class DailyAttendanceForm {
 	/** 日付 */
 	private String trainingDate;
 	
-    /** Task26：出勤時間（時） */
+    /** Task26/Task27：出勤（時・分） */
     private String trainingStartHour;
-
-    /** Task26：出勤時間（分） */
     private String trainingStartMinute;
 
-    /** Task26：退勤時間（時） */
+    /** Task26/Task27：退勤（時・分） */
     private String trainingEndHour;
-
-    /** Task26：退勤時間（分） */
     private String trainingEndMinute;
 	
 	/** 出勤時間 */
