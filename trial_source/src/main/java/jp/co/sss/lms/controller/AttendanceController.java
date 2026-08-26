@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.form.AttendanceForm;
-import jp.co.sss.lms.service.StudentAttendanceService0825;
+import jp.co.sss.lms.service.StudentAttendanceService;
 import jp.co.sss.lms.util.Constants;
 import jp.co.sss.lms.util.LoginUserUtil;
 
@@ -27,12 +27,11 @@ import jp.co.sss.lms.util.LoginUserUtil;
 public class AttendanceController {
 
 	@Autowired
-	private StudentAttendanceService0825 studentAttendanceService;
+	private StudentAttendanceService studentAttendanceService;
 	@Autowired
 	private LoginUserDto loginUserDto;
 	@Autowired
 	private LoginUserUtil loginUserUtil;
-
 
 	/**
 	 * 勤怠管理画面 初期表示
@@ -53,13 +52,13 @@ public class AttendanceController {
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
 		//新井陽介Task.25：過去日未入力チェック
-	    //権限が受講生の場合のみ(utilの判定を利用)、過去日未入力チェックを実行する
-	    if (loginUserUtil.isStudent()) {
-	        boolean hasPastUnentered = studentAttendanceService.notEnterCheck();
-	        model.addAttribute("hasPastUnentered", hasPastUnentered);
-	    } else {
-	        model.addAttribute("hasPastUnentered", false);
-	    }
+		//権限が受講生の場合のみ(utilの判定を利用)、過去日未入力チェックを実行する
+		if (loginUserUtil.isStudent()) {
+			boolean hasPastUnentered = studentAttendanceService.notEnterCheck();
+			model.addAttribute("hasPastUnentered", hasPastUnentered);
+		} else {
+			model.addAttribute("hasPastUnentered", false);
+		}
 		return "attendance/detail";
 	}
 
@@ -142,30 +141,34 @@ public class AttendanceController {
 	 * @return 勤怠管理画面
 	 * @throws ParseException
 	 */
-	  @RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
-	    public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
-	            throws ParseException {
+	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
+	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
+			throws ParseException {
 
-	        // ★ Task27 入力チェック
-	        studentAttendanceService.updateInputCheck(attendanceForm, result);
+		// ★ Task27 入力チェック
+		studentAttendanceService.updateInputCheck(attendanceForm, result);
 
-	        if (result.hasErrors()) {
-	            // エラー時は再度フォームを表示
-	            model.addAttribute("attendanceForm", attendanceForm);
-	            return "attendance/update";
-	        }
+		if (result.hasErrors()) {
+			// エラー時は再度フォームを表示
+			attendanceForm.setBlankTimes(studentAttendanceService.getBlankTimeMap());
+			attendanceForm.setStartHourMap(studentAttendanceService.createHourMap());
+			attendanceForm.setEndHourMap(studentAttendanceService.createHourMap());
+			attendanceForm.setStartMinuteMap(studentAttendanceService.createMinuteMap());
+			attendanceForm.setEndMinuteMap(studentAttendanceService.createMinuteMap());
+			model.addAttribute("attendanceForm", attendanceForm);
+			return "attendance/update";
+		}
 
-	        // 更新処理
-	        String message = studentAttendanceService.update(attendanceForm);
-	        model.addAttribute("message", message);
+		// 更新処理
+		String message = studentAttendanceService.update(attendanceForm);
+		model.addAttribute("message", message);
 
-	        List<AttendanceManagementDto> attendanceManagementDtoList =
-	                studentAttendanceService.getAttendanceManagement(
-	                        loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
+		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService.getAttendanceManagement(
+				loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 
-	        model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
+		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-	        return "attendance/detail";
-	    }
+		return "attendance/detail";
+	}
 
 }
