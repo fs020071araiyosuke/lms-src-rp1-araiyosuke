@@ -140,36 +140,8 @@ public class AttendanceController {
 	 * @param result
 	 * @return 勤怠管理画面
 	 * @throws ParseException
+	 * @author 新井陽介Task.26_27(追加)
 	 */
-	//	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
-	//	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
-	//			throws ParseException {
-	//
-	//		// ★ Task27 入力チェック
-	//		studentAttendanceService.updateInputCheck(attendanceForm, result);
-	//
-	//		if (result.hasErrors()) {
-	//			// エラー時は再度フォームを表示
-	//			attendanceForm.setBlankTimes(studentAttendanceService.getBlankTimeMap());
-	//			attendanceForm.setStartHourMap(studentAttendanceService.createHourMap());
-	//			attendanceForm.setEndHourMap(studentAttendanceService.createHourMap());
-	//			attendanceForm.setStartMinuteMap(studentAttendanceService.createMinuteMap());
-	//			attendanceForm.setEndMinuteMap(studentAttendanceService.createMinuteMap());
-	//			model.addAttribute("attendanceForm", attendanceForm);
-	//			return "attendance/update";
-	//		}
-	//
-	//		// 更新処理
-	//		String message = studentAttendanceService.update(attendanceForm);
-	//		model.addAttribute("message", message);
-	//
-	//		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService.getAttendanceManagement(
-	//				loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
-	//
-	//		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
-	//
-	//		return "attendance/detail";
-	//	}
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
 			throws ParseException {

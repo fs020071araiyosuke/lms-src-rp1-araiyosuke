@@ -41,7 +41,7 @@ public class DateUtil {
      */
     public Date parse(String date) throws ParseException {
         // yyyy-MM-dd を読み取れるように修正
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
         return sdf.parse(date);
     }
 

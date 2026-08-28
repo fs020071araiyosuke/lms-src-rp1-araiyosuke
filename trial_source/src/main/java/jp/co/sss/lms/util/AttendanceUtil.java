@@ -147,4 +147,58 @@ public class AttendanceUtil {
 		return false;
 	}
 
+	/**Task26
+	 * 時（0〜23）のプルダウン
+	 */
+	public LinkedHashMap<Integer, String> getHourMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		map.put(null, "");
+
+		for (int i = 0; i <= 23; i++) {
+			map.put(i, String.format("%02d", i));
+		}
+		return map;
+	}
+
+	/**
+	 * 分（0〜59）のプルダウン
+	 */
+	public LinkedHashMap<Integer, String> getMinuteMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		map.put(null, "");
+
+		for (int i = 0; i <= 59; i++) {
+			map.put(i, String.format("%02d", i));
+		}
+		return map;
+	}
+
+	/**Task26：時刻文字列 → 時・分の切り出し
+	 * "HH:mm" → 時（Integer）
+	 */
+	public Integer getHour(String timeStr) {
+		if (timeStr == null || timeStr.isEmpty())
+			return null;
+		return Integer.parseInt(timeStr.substring(0, 2));
+	}
+
+	/**
+	 * "HH:mm" → 分（Integer）
+	 */
+	public Integer getMinute(String timeStr) {
+		if (timeStr == null || timeStr.isEmpty())
+			return null;
+		return Integer.parseInt(timeStr.substring(3, 5));
+	}
+
+	/**Task27：勤務時間計算（中抜けチェック用）
+	 * 出勤〜退勤の勤務時間（TrainingTime）を算出
+	 */
+	public TrainingTime calcJukoTime(TrainingTime start, TrainingTime end) {
+		if (start == null || end == null || start.isBlank() || end.isBlank()) {
+			return new TrainingTime(0, 0);
+		}
+		return end.subtract(start);
+	}
+
 }
